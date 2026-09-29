@@ -73,3 +73,6 @@ SELECT user_id, SUM(amount_minor) AS ledger_balance FROM ledger_entries GROUP BY
 SELECT actor_id, action, outcome, reference, created_at FROM audit_events ORDER BY id DESC LIMIT 20;
 ```
 Ledger balances should equal wallet balances after successful secured workflows. The test-only vulnerable failure intentionally breaks that invariant.
+
+## Beneficiary prerequisite
+Before transfer tests, log in as Ali in each edition and manually add `sara@wallet.test` through Add / manage beneficiaries. Otherwise the missing-beneficiary validation stops the request before the intended comparison.
