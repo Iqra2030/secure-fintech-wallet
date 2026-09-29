@@ -85,3 +85,7 @@ To reset **only a disposable demo database**, confirm DB_DATABASE in `.env`, the
 Controls: session authentication, password hashing, CSRF, ownership policy, amount validation, DB constraints, transfer idempotency, atomic debit/credit with ordered locks, webhook HMAC/freshness/event deduplication, login and transfer throttling, and audit records.
 
 Not implemented: FIDO2, OIDC/JWT, RLS, envelope encryption/KMS, sophisticated fraud detection, production TLS, tamper-evident audit logs, HA or production deployment. HTTP is loopback-only in this lab; do not claim network encryption. Basic rate limiting is not a production distributed abuse-control system.
+
+## Saved beneficiaries and inspecting your data
+
+See [the beneficiary and database walkthrough](docs/DATABASE_AND_BENEFICIARIES.md). Existing installations need only `php artisan migrate` after pulling. Add Sara manually in both editions before the Burp transfer tests.

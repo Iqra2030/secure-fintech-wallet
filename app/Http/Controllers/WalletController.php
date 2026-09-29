@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 class WalletController {
  public function dashboard(Request $r) {
-  return view('dashboard',['wallet'=>DB::table('wallets')->where('user_id',$r->user()->id)->first(),'customers'=>DB::table('users')->where('id','!=',$r->user()->id)->get(['id','name','email']),'entries'=>DB::table('ledger_entries')->where('user_id',$r->user()->id)->orderByDesc('id')->limit(20)->get()]);
+  return view('dashboard',['wallet'=>DB::table('wallets')->where('user_id',$r->user()->id)->first(),'customers'=>DB::table('users')->whereIn('id',DB::table('beneficiaries')->select('beneficiary_user_id')->where('user_id',$r->user()->id))->orderBy('name')->get(['id','name','email']),'entries'=>DB::table('ledger_entries')->where('user_id',$r->user()->id)->orderByDesc('id')->limit(20)->get()]);
  }
  public function show(int $owner) {
   if(!config('lab.vulnerable') && Gate::denies('view-wallet',$owner)){Audit::write('wallet.read','denied',(string)$owner);abort(403);}

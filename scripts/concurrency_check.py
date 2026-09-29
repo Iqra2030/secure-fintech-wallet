@@ -11,6 +11,8 @@ def session():
  token=re.search(r'name="_token"[^>]*value="([^"]+)"',page).group(1)
  return opener,token
 sessions=[session(),session()]
+opener,token=sessions[0]
+opener.open(base+'/beneficiaries',urllib.parse.urlencode({'_token':token,'beneficiary_user_id':2}).encode()).read()
 initial=json.load(sessions[0][0].open(base+'/wallets/1'))['wallet']['balance_minor']
 assert int(initial)==10000000, 'Reset synthetic database before this test'
 barrier=threading.Barrier(2)

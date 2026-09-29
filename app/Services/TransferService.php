@@ -18,6 +18,9 @@ class TransferService {
     if($existing){abort_unless(hash_equals($existing->request_hash,$hash),409,'Idempotency key reused with different details.');return $existing;}
     if($amount<=0 || $amount>100000000 || $sender===$receiver)throw ValidationException::withMessages(['amount'=>'Invalid transfer.']);
    }
+   $beneficiaryQuery=DB::table('beneficiaries')->where('user_id',$sender)->where('beneficiary_user_id',$receiver);
+   if(!config('lab.vulnerable'))$beneficiaryQuery->lockForUpdate();
+   if(!$beneficiaryQuery->first())throw ValidationException::withMessages(['receiver_id'=>'Add this customer as a beneficiary before sending money.']);
    if($wallets[$sender]->balance_minor<$amount)throw ValidationException::withMessages(['amount'=>'Insufficient funds.']);
    $id=(string)Str::uuid();
    DB::table('wallets')->where('user_id',$sender)->decrement('balance_minor',$amount,['updated_at'=>now()]);

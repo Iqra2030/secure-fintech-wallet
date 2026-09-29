@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 class WalletTest extends TestCase {
  use DatabaseMigrations;
- protected function setUp(): void {parent::setUp();$this->seed();}
+ protected function setUp(): void {parent::setUp();$this->seed();DB::table('beneficiaries')->insert(['user_id'=>1,'beneficiary_user_id'=>2,'created_at'=>now(),'updated_at'=>now()]);}
  private function balance(int $id): int {return (int)DB::table('wallets')->where('user_id',$id)->value('balance_minor');}
  private function payload(array $extra=[]): array {return array_merge(['receiver_id'=>2,'amount'=>'2000.00','idempotency_key'=>'test-key'],$extra);}
  public function test_owner_and_other_customer_access(): void {
