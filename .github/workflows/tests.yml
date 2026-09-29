@@ -31,3 +31,14 @@ jobs:
           DB_HOST: 127.0.0.1
           DB_USERNAME: wallet
           DB_PASSWORD: ci-only-password
+      - name: Concurrent HTTP transfers on four PHP workers
+        if: github.ref_name != 'vulnerable-demo'
+        run: |
+          php artisan migrate:fresh --seed --force
+          PHP_CLI_SERVER_WORKERS=4 php artisan serve --host=127.0.0.1 --port=8000 > /tmp/wallet-server.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:8000/login >/dev/null && break; sleep 1; done
+          python3 scripts/concurrency_check.py http://127.0.0.1:8000
+        env:
+          DB_DATABASE: wallet_testing
+          DB_USERNAME: wallet
+          DB_PASSWORD: ci-only-password
