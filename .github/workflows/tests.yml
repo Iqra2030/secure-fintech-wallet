@@ -1,0 +1,33 @@
+name: Wallet tests
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: wallet
+          POSTGRES_PASSWORD: ci-only-password
+          POSTGRES_DB: wallet_testing
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo_pgsql, mbstring, xml
+          coverage: none
+      - run: composer install --no-interaction --prefer-dist
+      - run: |
+          cp .env.example .env
+          php artisan key:generate
+          php vendor/bin/phpunit
+        env:
+          DB_HOST: 127.0.0.1
+          DB_USERNAME: wallet
+          DB_PASSWORD: ci-only-password
