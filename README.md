@@ -34,11 +34,12 @@ CREATE DATABASE wallet_testing OWNER wallet;
 Run each CREATE DATABASE separately with autocommit enabled. The application role is not a superuser; for this lab it owns its tables and migrations. **RLS is not implemented.**
 
 ```powershell
+# First installation only; set DB_DATABASE=wallet_secured and SESSION_COOKIE=wallet_secured_session in .env
 php artisan migrate --seed
-php artisan serve --host=127.0.0.1 --port=8000
+php -S 127.0.0.1:8085 -t public
 ```
 
-Open http://127.0.0.1:8000. Demo accounts: `ali@wallet.test`, `sara@wallet.test`, `ahmed@wallet.test`. Password for each: `WalletLab!2026`. Each starts with PKR 100,000. Newly registered accounts start at zero.
+Open http://127.0.0.1:8085. Demo accounts: `ali@wallet.test`, `sara@wallet.test`, `ahmed@wallet.test`. Password for each: `WalletLab!2026`. Each starts with PKR 100,000. Newly registered accounts start at zero.
 
 ### Run the vulnerable edition beside it
 In a second terminal, from the secured checkout:
@@ -51,11 +52,11 @@ Copy-Item .env.example .env
 php artisan key:generate
 ```
 
-Edit that `.env`: `DB_DATABASE=wallet_vulnerable`, `APP_URL=http://127.0.0.1:8001`, `SESSION_COOKIE=wallet_vulnerable_session`. Set DB credentials and its own WEBHOOK_SECRET. Then:
+Edit that `.env`: `DB_DATABASE=wallet_vulnerable`, `APP_URL=http://127.0.0.1:8086`, `SESSION_COOKIE=wallet_vulnerable_session`. Set DB credentials and its own WEBHOOK_SECRET. Then:
 
 ```powershell
 php artisan migrate --seed
-php artisan serve --host=127.0.0.1 --port=8001
+php -S 127.0.0.1:8086 -t public
 ```
 
 Keep distinct database names and cookie names: cookies are not isolated by port. Never run both editions against one database. If Git cannot find the branch, run `git fetch origin` and use `git worktree add ../wallet-vulnerable -b vulnerable-demo origin/vulnerable-demo`.
@@ -70,13 +71,13 @@ php vendor/bin/phpunit
 
 Run in each worktree. The tests assert both the expected vulnerability and the corresponding secured outcome. HTTP CSRF is bypassed by Laravel's test environment; manually verify it with Burp as described in the guide.
 
-For a real two-request concurrency check against a running secured server, install Python 3 and run `python scripts/concurrency_check.py http://127.0.0.1:8000` immediately after seeding. This uses two independently logged-in sessions. PHP's built-in server is single-process by default, so use multiple workers on Linux (`PHP_CLI_SERVER_WORKERS=4 php artisan serve --host=127.0.0.1`) or a concurrent PHP server to exercise actual overlap. The script alone on a single-worker server checks results but does not prove overlapping execution.
+For a real two-request concurrency check against a running secured server, install Python 3 and run `python scripts/concurrency_check.py http://127.0.0.1:8085` immediately after seeding. This uses two independently logged-in sessions. PHP's built-in server is single-process by default, so use multiple workers on Linux (`PHP_CLI_SERVER_WORKERS=4 php artisan serve --host=127.0.0.1`) or a concurrent PHP server to exercise actual overlap. The script alone on a single-worker server checks results but does not prove overlapping execution.
 
 ## Submission materials
 
 - [Burp walkthrough](docs/BURP_GUIDE.md): exact local before/after tests.
-- [Security design and report draft](docs/SECURITY_REPORT.md): architecture, assets, justification and limitations.
-- [Evidence sheet](docs/EVIDENCE.md): fill with your observed results and screenshots.
+- [Security design report](docs/SECURITY_REPORT.md): architecture, assets, justification and limitations.
+- [Evidence sheet](docs/EVIDENCE.md): recorded test results and screenshot index.
 
 To reset **only a disposable demo database**, confirm DB_DATABASE in `.env`, then run `php artisan migrate:fresh --seed`. This erases that database's application tables. Do not run against valuable data.
 
@@ -89,3 +90,13 @@ Not implemented: FIDO2, OIDC/JWT, RLS, envelope encryption/KMS, sophisticated fr
 ## Saved beneficiaries and inspecting your data
 
 See [the beneficiary and database walkthrough](docs/DATABASE_AND_BENEFICIARIES.md). Existing installations need only `php artisan migrate` after pulling. Add Sara manually in both editions before the Burp transfer tests.
+
+## Final assessment submission — 30 September 2026
+
+Application behavior is frozen at the tested beneficiary release. This submission updates documentation only.
+
+- [Recorded Tests 1–7 and control names](docs/TEST_RESULTS.md)
+- [Submission and code download guide](docs/SUBMISSION_GUIDE.md)
+- [Screenshot evidence index](docs/EVIDENCE.md)
+
+Keep the original screenshots with your submission. GitHub source archives do not include your local PostgreSQL data, .env secrets, or installed Composer dependencies. FIDO2 remains future work.
