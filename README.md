@@ -93,10 +93,14 @@ See [the beneficiary and database walkthrough](docs/DATABASE_AND_BENEFICIARIES.m
 
 ## Final assessment submission — 30 September 2026
 
-Application behavior is frozen at the tested beneficiary release. This submission updates documentation only.
+The original submission preserved the tested beneficiary release. The subsequent review revision fixes history, response exposure and failure auditing; see docs/REVIEW_RESULTS.md for its validation status.
 
 - [Recorded Tests 1–7 and control names](docs/TEST_RESULTS.md)
 - [Submission and code download guide](docs/SUBMISSION_GUIDE.md)
 - [Screenshot evidence index](docs/EVIDENCE.md)
 
 Keep the original screenshots with your submission. GitHub source archives do not include your local PostgreSQL data, .env secrets, or installed Composer dependencies. FIDO2 remains future work.
+
+## Review revision and retesting
+
+See [review changes and validation](docs/REVIEW_RESULTS.md) and [remaining manual evidence steps](docs/RETEST_GUIDE.md). Transfer history now displays sender, receiver, amount, time, status and full reference. Public JSON omits internal replay keys/hashes. Failure audits are written outside the transfer transaction. Stored session payloads are encrypted; clear the configuration cache and log in again after updating. HTTP loopback still requires SESSION_SECURE_COOKIE=false; an HTTPS deployment must set it true. Registration and beneficiary lookup account enumeration remain documented limitations.
