@@ -1,6 +1,6 @@
 # Burp Suite Community before/after demonstration
 
-Use only these local lab instances and synthetic data. Start with matching seeded databases. Secure is port 8000; vulnerable is 8001. Use Burp's built-in browser to avoid proxy setup. Leave Intercept off while navigating; use Proxy HTTP history → Send to Repeater. Add `Accept: application/json` to mutation requests for clear status codes. Preserve each instance's own session cookie and CSRF token. Never transfer cookies across editions.
+Use only these local lab instances and synthetic data. Start with matching seeded databases. Secure is port 8085; vulnerable is 8086. Use Burp's built-in browser to avoid proxy setup. Leave Intercept off while navigating; use Proxy HTTP history → Send to Repeater. Add `Accept: application/json` to mutation requests for clear status codes. Preserve each instance's own session cookie and CSRF token. Never transfer cookies across editions.
 
 Before each independent scenario reset the appropriate disposable database or record exact starting balances. Evidence must include request, response and state—not just status.
 
@@ -26,14 +26,14 @@ Create this request in Repeater (JSON amount is paisa):
 
 ```http
 POST /webhooks/payment HTTP/1.1
-Host: 127.0.0.1:8001
+Host: 127.0.0.1:8086
 Content-Type: application/json
 Accept: application/json
 
 {"event_id":"forged-001","user_id":1,"amount_minor":50000}
 ```
 
-Burp updates Content-Length. Vulnerable credits PKR 500. Secured, using port 8000, returns 401. A missing secured WEBHOOK_SECRET causes 503: fix configuration before claiming a successful signature test.
+Burp updates Content-Length. Vulnerable credits PKR 500. Secured, using port 8085, returns 401. A missing secured WEBHOOK_SECRET causes 503: fix configuration before claiming a successful signature test.
 
 Generate a legitimate simulator request in the secured project:
 
@@ -51,10 +51,12 @@ Log out. Capture one incorrect login request for `ali@wallet.test` with password
 - Secured: first five are 422; sixth is 429 with Retry-After.
 This demonstrates throttling, not password compromise. Use Repeater; no paid scanner required.
 
-## 6. Rollback and concurrency (automated evidence)
+## 6. Forced partial failure — transaction atomicity
 `php vendor/bin/phpunit --filter partial_failure` injects a test-only exception immediately after debit. There is no failure-trigger HTTP parameter.
 - Vulnerable test records the inconsistent sender balance.
-- Secured test requires both balances and ledger state to remain unchanged.
+- Secured test checks restored sender and recipient balances and zero transfer rows. This focused test does not directly assert ledger row counts.
+
+## 7. Concurrent spending — ordered row locks and balance recheck
 
 For concurrency follow README's multi-worker instructions and run `scripts/concurrency_check.py` on a fresh secured seed. Two PKR 60,000 requests from a PKR 100,000 wallet should result in one success, one insufficient-funds rejection, sender PKR 40,000 and recipient PKR 160,000. Run on a concurrent server before claiming race-condition evidence.
 

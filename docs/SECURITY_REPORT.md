@@ -1,4 +1,4 @@
-# Mini Secure Fintech Wallet — report draft
+# Mini Secure Fintech Wallet — assessment report
 
 ## System overview
 A local Laravel/PostgreSQL application supports registration, login, balance viewing, transfers, transaction records and logout. A local payment simulator supplies signed credit callbacks. All identities and money are synthetic. Two editions share routes and seed data, enabling controlled before/after comparisons.
@@ -39,10 +39,16 @@ Credentials, session cookies, customer details, balances, transfer records, webh
 - Resilience: failed secured transfers roll back. Backup/restore and failover are not implemented.
 
 ## Test evidence
-Complete EVIDENCE.md with observed results, timestamped screenshots and database state. Automated tests cover expected edition-specific outcomes. Do not report proposed results as observed. Concurrency needs multiple server workers; the built-in single-worker server serializes requests.
+The user performed Tests 1–7 on 29–30 September 2026. See TEST_RESULTS.md for observed outcomes, control names, interpretation and limitations; EVIDENCE.md maps the original screenshot names. These are user-run lab results, not a new independent penetration test. Test 7 used two PHP processes on ports 8087 and 8088 against wallet_testing. It demonstrated the expected two-request result, but no database lock-wait trace was captured. A separate expired-timestamp manual result is not recorded.
 
 ## Individual contribution
 Complete honestly: author name, application/design work, testing, report work and any AI assistance required by course rules. Do not invent team members. The brief lists groups of 2–3; document the approved arrangement if submitting individually.
 
 ## Limitations and improvements
 Local assessment only. No real money, external payment gateway, FIDO2, OIDC, KMS, RLS, production TLS, advanced fraud engine or high availability. Loopback HTTP is not transport encryption. Audit tables can be changed by a database owner. Recipient names/emails are intentionally shown to authenticated lab customers; a real service would need a privacy-preserving beneficiary lookup. Registration uses basic throttling; no email verification/account recovery. Add strong transaction approval, separated DB roles, immutable external audit storage, HTTPS and tested recovery before considering production use.
+
+## Release scope
+
+The tested application baseline is secured commit `f41bc21293352566fe4c9a97110065ab5c5ff453` and vulnerable comparison commit `70db46f129267b2ceaf291991c1b0eac91aeeb20`. The final submission adds documentation to these baselines without changing application code. Registration, beneficiary lookup/add/remove and transfer history already exist. New accounts start at zero; beneficiaries are registered customers explicitly saved by the authenticated sender.
+
+The seven scenarios support a bounded conclusion: the secured implementation resisted the specific exercised requests and maintained the tested monetary invariants. They do not establish universal security, production readiness or complete race-condition coverage. No additional controls were added after the tests.
