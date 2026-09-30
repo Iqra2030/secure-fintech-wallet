@@ -71,3 +71,7 @@ TransferService acquires ordered wallet locks inside a transaction and checks fu
 The secured edition resisted the specific malicious requests and preserved the tested transfer invariants. These results are suitable for a bounded classroom demonstration, not a production security certification. Application authentication, CSRF, beneficiary ownership, constraints and auditing are implemented; their presence must not be confused with a complete manual test of every path.
 
 FIDO2/MFA, OAuth/OIDC, KMS/HSM, database RLS, advanced fraud scoring, production-grade distributed rate limiting, production TLS and tamper-evident external audit storage remain outside this release. Registration exists, but production email verification and account recovery are not implemented. Future work can be planned after submission without changing this tested baseline.
+
+## Subsequent review revision
+
+The results above are historical Windows lab observations. The later response-minimization, history and failure-audit changes have their own automated verification in REVIEW_RESULTS.md. Existing screenshot fields are not evidence that the revised response still exposes internal keys. Manual T3 images, T4 expiry capture, a numbered T5 capture and a vulnerable T7 screenshot remain separate evidence tasks; see RETEST_GUIDE.md.

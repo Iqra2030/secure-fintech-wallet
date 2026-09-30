@@ -36,7 +36,7 @@ php artisan config:clear
 php -S 127.0.0.1:8086 -t public
 ```
 
-If Git reports conflicting local changes or a non-fast-forward state, preserve those changes and resolve that message before continuing. The final submission update changes documentation only: it requires no reseeding or database reset. Existing balances and test history remain in PostgreSQL. First-time setup is covered in README.md; beneficiary/database queries are in DATABASE_AND_BENEFICIARIES.md.
+If Git reports conflicting local changes or a non-fast-forward state, preserve those changes and resolve that message before continuing. The review update changes application code but requires no database schema migration or reseeding. Run php artisan config:clear and log in again because stored sessions are now encrypted. Existing balances and test history remain in PostgreSQL. First-time setup is covered in README.md; beneficiary/database queries are in DATABASE_AND_BENEFICIARIES.md.
 
 ## Demonstration order
 
@@ -46,4 +46,4 @@ Use wallet_testing only for destructive automated test setup. Never point PHPUni
 
 ## Release boundary
 
-No new application controls are introduced by this submission update. FIDO2 and other proposed extensions remain future work. Documented manual results reflect the recorded lab session; any later code change needs its own validation record.
+The review revision adds response minimization and failure auditing and completes visible transfer history. FIDO2 and other proposed extensions remain future work. Documented manual results reflect the recorded lab session; any later code change needs its own validation record.
