@@ -15,3 +15,7 @@ Original screenshots were supplied during the user-run lab on 29–30 September 
 T3 filenames refer to earlier conversation evidence; they are not all available in the current attachment directory. Preserve your original copies. The secured T3 final unchanged balance was user-confirmed; a separate final screenshot is absent. T7 recipient final balance and lock waits lack dedicated screenshots. Manual webhook expiry and direct database CHECK rejection are not marked as observed tests.
 
 For submission, retain response codes, transfer/event references and relevant balances. Redact cookie headers, CSRF tokens, credentials and any real secrets. Do not alter response outcomes. Include the exact source commit from the GitHub download and record the selected database when reproducing a test.
+
+## Review regression evidence
+
+See REVIEW_RESULTS.md and evidence/review-main.log / evidence/review-vulnerable-demo.log for the actual GitHub HTTP runs. They add a vulnerable T7 negative balance, numbered T5 attempts, T3 replay balances and a correctly signed expired T4 message. They are automated logs, not new Windows screenshots.

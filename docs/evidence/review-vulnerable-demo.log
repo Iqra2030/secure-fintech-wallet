@@ -1,0 +1,22 @@
+# Selected actual workflow log lines
+# Source: https://github.com/Iqra2030/secure-fintech-wallet/actions/runs/36698993763
+# Test and HTTP-result lines only; runner setup and credentials omitted.
+2026-09-30T09:54:25.0893742Z Tests: 28, Assertions: 127, Skipped: 1.
+2026-09-30T09:54:28.6953535Z {"server": "http://127.0.0.1:8087", "before": {"wallet": {"user_id": 1, "balance_minor": 10000000}, "transactions": []}}
+2026-09-30T09:54:28.7167280Z {"server": "http://127.0.0.1:8088", "before": {"wallet": {"user_id": 1, "balance_minor": 10000000}, "transactions": []}}
+2026-09-30T09:54:28.8103307Z {"server": "http://127.0.0.1:8087", "http": 200, "response": "{\"id\":\"22a3e37a-0518-4334-8803-b9aff2faf06c\",\"sender_id\":1,\"receiver_id\":2,\"amount_minor\":6000000,\"status\":\"completed\",\"created_at\":\"2026-09-30 09:54:28\"}"}
+2026-09-30T09:54:28.8111140Z {"server": "http://127.0.0.1:8088", "http": 200, "response": "{\"id\":\"8fb61a59-26a8-4a97-a190-b071d27c7cfa\",\"sender_id\":1,\"receiver_id\":2,\"amount_minor\":6000000,\"status\":\"completed\",\"created_at\":\"2026-09-30 09:54:28\"}"}
+2026-09-30T09:54:28.8296162Z {"after": {"wallet": {"user_id": 1, "balance_minor": -2000000}, "transactions": [{"id": "22a3e37a-0518-4334-8803-b9aff2faf06c", "sender_id": 1, "sender_name": "Ali", "receiver_id": 2, "receiver_name": "Sara", "amount_minor": 6000000, "status": "completed", "created_at": "2026-09-30 09:54:28"}, {"id": "8fb61a59-26a8-4a97-a190-b071d27c7cfa", "sender_id": 1, "sender_name": "Ali", "receiver_id": 2, "receiver_name": "Sara", "amount_minor": 6000000, "status": "completed", "created_at": "2026-09-30 09:54:28"}]}}
+2026-09-30T09:54:28.8312119Z VULNERABILITY OBSERVED: two transfers, Ali PKR -20,000.
+2026-09-30T09:54:30.1532847Z {"test": "T5", "attempt": 1, "http": 422, "retry_after": null, "body": "{\"message\":\"Invalid email or password.\",\"errors\":{\"email\":[\"Invalid email or password.\"]}}"}
+2026-09-30T09:54:30.3747770Z {"test": "T5", "attempt": 2, "http": 422, "retry_after": null, "body": "{\"message\":\"Invalid email or password.\",\"errors\":{\"email\":[\"Invalid email or password.\"]}}"}
+2026-09-30T09:54:30.5962756Z {"test": "T5", "attempt": 3, "http": 422, "retry_after": null, "body": "{\"message\":\"Invalid email or password.\",\"errors\":{\"email\":[\"Invalid email or password.\"]}}"}
+2026-09-30T09:54:30.8146035Z {"test": "T5", "attempt": 4, "http": 422, "retry_after": null, "body": "{\"message\":\"Invalid email or password.\",\"errors\":{\"email\":[\"Invalid email or password.\"]}}"}
+2026-09-30T09:54:31.0355663Z {"test": "T5", "attempt": 5, "http": 422, "retry_after": null, "body": "{\"message\":\"Invalid email or password.\",\"errors\":{\"email\":[\"Invalid email or password.\"]}}"}
+2026-09-30T09:54:31.2562184Z {"test": "T5", "attempt": 6, "http": 422, "retry_after": null, "body": "{\"message\":\"Invalid email or password.\",\"errors\":{\"email\":[\"Invalid email or password.\"]}}"}
+2026-09-30T09:54:31.6160437Z {"test": "T3", "before": {"wallet": {"user_id": 1, "balance_minor": 10000000}, "transactions": []}}
+2026-09-30T09:54:31.6421121Z {"test": "T3", "send": 1, "http": 200, "body": "{\"id\":\"4651d377-31ba-41ed-ae9f-4fbf65ba2591\",\"sender_id\":1,\"receiver_id\":2,\"amount_minor\":10000,\"status\":\"completed\",\"created_at\":\"2026-09-30 09:54:31\"}"}
+2026-09-30T09:54:31.6657846Z {"test": "T3", "send": 2, "http": 200, "body": "{\"id\":\"d78ee58a-9290-4767-8391-2ce1e275fb91\",\"sender_id\":1,\"receiver_id\":2,\"amount_minor\":10000,\"status\":\"completed\",\"created_at\":\"2026-09-30 09:54:31\"}"}
+2026-09-30T09:54:31.6834571Z {"test": "T3", "after": {"wallet": {"user_id": 1, "balance_minor": 9980000}, "transactions": [{"id": "4651d377-31ba-41ed-ae9f-4fbf65ba2591", "sender_id": 1, "sender_name": "Ali", "receiver_id": 2, "receiver_name": "Sara", "amount_minor": 10000, "status": "completed", "created_at": "2026-09-30 09:54:31"}, {"id": "d78ee58a-9290-4767-8391-2ce1e275fb91", "sender_id": 1, "sender_name": "Ali", "receiver_id": 2, "receiver_name": "Sara", "amount_minor": 10000, "status": "completed", "created_at": "2026-09-30 09:54:31"}]}}
+2026-09-30T09:54:31.8590035Z {"test": "T4 expiry", "signed_age_seconds": 600, "http": 200, "body": "{\"status\":\"credited\"}", "balance_before": 9980000, "balance_after": 10030000}
+2026-09-30T09:54:31.8591314Z PASS: HTTP replay, numbered login attempts and correctly signed expiry comparison.
